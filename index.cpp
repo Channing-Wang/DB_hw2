@@ -372,6 +372,9 @@ void Index::clear_the_node(Node* cur)
 			clear_the_node(cur->ptr[i]);
 		}
 	}
+	delete[] cur->ptr;
+	delete[] cur->key;
+	delete[] cur->value;
 	delete cur;
 }
 
