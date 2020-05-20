@@ -46,6 +46,5 @@ int main()
     auto time_to_query_range = chrono::duration_cast<chrono::microseconds>(range_query - key_query).count();
     record_time_used(int(time_to_build_index), int(time_to_query_key), int(time_to_query_range));
 
-	system("pause");
     return 0;
 }

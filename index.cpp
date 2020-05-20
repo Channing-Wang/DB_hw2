@@ -21,13 +21,6 @@ Node::Node()
 	parent = NULL;
 }
 
-Node::~Node()
-{
-	delete[] key;
-	delete[] value;
-	delete[] ptr;
-}
-
 //=====class BPtree=====
 
 BPtree::BPtree()
@@ -240,31 +233,6 @@ void BPtree::insertInternal(int key, Node* cur, Node* child)
 		}
 	}
 }
-void BPtree::print(Node* cur)
-{
-	if (cur == NULL)
-		return;
-	Node* re = cur;
-	while (cur->is_leaf == false)
-		cur = cur->ptr[0];
-	while (cur != NULL)
-	{
-		for (int i = 0; i < cur->size; ++i)
-			cout << cur->key[i] << ' ';
-		cur = cur->back;
-	}
-
-	cout << endl;
-
-	while (re->is_leaf == false)
-		re = re->ptr[re->size];
-	while (re != NULL)
-	{
-		for (int i = re->size - 1; i >= 0; --i)
-			cout << re->key[i] << ' ';
-		re = re->front;
-	}
-}
 
 int BPtree::search(int key)
 {
@@ -377,11 +345,6 @@ Index::Index(int num_rows, vector<int>& key, vector<int>& value)
 	}
 }
 
-Index::~Index()
-{
-	delete Tree;
-}
-
 void Index::key_query(vector<int>& query_keys)
 {
 	ofstream file;
@@ -400,7 +363,23 @@ void Index::range_query(vector<pair<int, int>>& query_pairs)
 	file.close();
 }
 
+void Index::clear_the_node(Node* cur)
+{
+	if (cur->is_leaf == false)
+	{
+		for (int i = 0; i < cur->size; ++i)
+		{
+			clear_the_node(cur->ptr[i]);
+		}
+	}
+	delete cur;
+}
+
 void Index::clear_index()
 {
-	//use destructor to release memory usage
+	Node* cur = Tree->getroot();
+	clear_the_node(cur);
+	delete Tree;
 }
+
+//test memory leak valgrind --tool=memcheck program_name

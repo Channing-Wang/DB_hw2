@@ -23,8 +23,8 @@ private:
 	Node** ptr;
 public:
 	Node();
-	~Node();
 	friend class BPtree;
+	friend class Index;
 };
 
 class BPtree
@@ -39,7 +39,6 @@ public:
 	int search(int key);
 	int range_query(int, int);
 	//
-	void print(Node*);
 	Node* getroot() { return root; };
 };
 
@@ -47,12 +46,11 @@ class Index
 {
 public:
 	Index(int, vector<int>&, vector<int>&);
-	~Index();
 	void key_query(vector<int>&);
 	void range_query(vector<pair<int, int>>&);
+	void clear_the_node(Node* cur);
 	void clear_index();
 
-	friend class BPtree;
 	BPtree* Tree;
 };
 
